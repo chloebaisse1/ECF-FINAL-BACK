@@ -50,7 +50,7 @@ class PassageController extends AbstractController
                 throw new BadRequestException('Passage non trouvé pour {id} id');
             }
             return $this->json(
-                ['message'=> "Passage trouvé : {$passage->getName()} pour {$passage->getId()} id"]
+                ['message'=> "Passage trouvé : {$passage->getNom()} pour {$passage->getId()} id"]
             );
     }
 
@@ -65,7 +65,7 @@ class PassageController extends AbstractController
             throw new BadRequestException('Passage non trouvé pour {id} id');
         }
 
-        $passage->setName('Passage name updated');
+        $passage->setNom('Passage name updated');
 
         $this->manager->flush();
 
