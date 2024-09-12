@@ -61,7 +61,7 @@ class HoraireController extends AbstractController
             throw new BadRequestException('Horaire non trouvé pour {id} id');
         }
 
-        $horaire->setName('Horaire name updated');
+        $horaire->setJour('Horaire jour updated');
 
         $this->manager->flush();
 
