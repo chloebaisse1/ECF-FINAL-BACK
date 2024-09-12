@@ -46,7 +46,7 @@ class AnimalController extends AbstractController
                 throw new BadRequestException('Animal non trouvé pour {id} id');
             }
             return $this->json(
-                ['message'=> "Animal trouvé : {$animal->getName()} pour {$animal->getId()} id"]
+                ['message'=> "Animal trouvé : {$animal->getNom()} pour {$animal->getId()} id"]
             );
     }
 
@@ -61,7 +61,7 @@ class AnimalController extends AbstractController
             throw new BadRequestException('Animal non trouvé pour {id} id');
         }
 
-        $animal->setName('Animal name updated');
+        $animal->setNom('Animal nom updated');
 
         $this->manager->flush();
 
