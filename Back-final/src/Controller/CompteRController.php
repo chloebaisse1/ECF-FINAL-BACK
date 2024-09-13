@@ -6,86 +6,94 @@ use App\Entity\CompteR;
 use App\Repository\CompteRRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('api/compteR', name: 'app_api_compteR_')]
 class CompteRController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $manager, private CompteRRepository $repository)
+    public function __construct(
+        private EntityManagerInterface $manager,
+        private CompteRRepository $repository,
+        private SerializerInterface $serializer,
+        private UrlGeneratorInterface $urlGenerator,)
     {
     }
 
 
     #[Route(name: 'new', methods: 'POST')]
-    public function new(): Response
+    public function new(Request $request): JsonResponse
     {
-        $compteR = new CompteR();
-        $compteR->setNom('boby');
-        $compteR->setRace('lion');
-        $compteR->setHabitat('savane');
-        $compteR->setNourriture('boeuf');
-        $compteR->setQuantitee('500grs');
-        $compteR->setDate(new \DateTimeImmutable());
-
+        $compteR = $this->serializer->deserialize($request->getContent(), CompteR::class, 'json');
+        $compteR->setCreatedAt(new \DateTimeImmutable());
 
         $this->manager->persist($compteR);
         $this->manager->flush();
 
-        // a stocker en base de données
-        return $this->json(
-            ['message' => 'Compte-rendu créé'],
-            Response::HTTP_CREATED
+        $responseData = $this->serializer->serialize($compteR, 'json');
+        $location = $this->urlGenerator->generate(
+        'app_api_compteR_show',
+        ['id' => $compteR->getId()],
+        UrlGeneratorInterface::ABSOLUTE_URL
         );
+
+        return new JsonResponse($responseData, Response::HTTP_CREATED, ["Location"=> $location], true);
     }
+
+
 
     #[Route('/{id}', name: 'show', methods: 'GET')]
-    public function show(int $id): Response
+    public function show(int $id): JsonResponse
     {
         $compteR = $this->repository->findOneBy(['id' => $id]);
+            if($compteR){
+                $responseData = $this->serializer->serialize($compteR, 'json');
 
-            if(!$compteR){
-                throw new BadRequestException('Compte-rendu non trouvé pour {id} id');
+            return new JsonResponse($responseData, Response::HTTP_OK, [], true);
             }
-            return $this->json(
-                ['message'=> "Compte-rendu trouvé : {$compteR->getNom()} pour {$compteR->getId()} id"]
-            );
+
+            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
+
 
 
     #[Route('/{id}', name: 'edit', methods: 'PUT')]
-    public function edit(int $id): Response
+    public function edit(int $id, Request $request): JsonResponse
     {
         $compteR = $this->repository->findOneBy(['id' => $id]);
+        if($compteR){
+            $compteR = $this->serializer->deserialize(
+                $request->getContent(),
+                CompteR::class,
+                'json',
+                [AbstractNormalizer::OBJECT_TO_POPULATE => $compteR]
+            );
+            $compteR->setUpdatedAt(new \DateTimeImmutable());
 
+            $this->manager->flush();
 
-        if(!$compteR){
-            throw new BadRequestException('Compte-rendu non trouvé pour {id} id');
+            return new JsonResponse(null, Response::HTTP_NO_CONTENT);
         }
-
-        $compteR->setNom('Compte-rendu name updated');
-
-        $this->manager->flush();
-
-        return $this->redirectToRoute('app_api_compteR_show', ['id' => $compteR->getId()]);
+            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
-
 
 
 
     #[Route('/{id}', name: 'delete', methods: 'DELETE')]
-    public function delete(int $id): Response
+    public function delete(int $id): JsonResponse
     {
         $compteR = $this->repository->findOneBy(['id' => $id]);
-
-        if(!$compteR){
-
-            throw new BadRequestException('Compte-rendu non trouvé pour {id} id');
-        }
-
+        if($compteR){
         $this->manager->remove($compteR);
         $this->manager->flush();
-        return $this->json(['message' => 'Compte-rendu supprimé'], Response::HTTP_NO_CONTENT);
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        }
+        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
 }
