@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use OpenApi\Attributes as OA;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,18 +15,56 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
+
+
+
 #[Route('/api', name: 'app_api_')]
 class SecurityController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $manager,
-        private SerializerInterface $serializer,
-        private UserPasswordHasherInterface $passwordHasher,
+        private SerializerInterface $serializer
         )
     {
     }
 
     #[Route('/registration', name: 'registration', methods: 'POST')]
+    #[OA\Post(
+    path: "/api/registration",
+    summary: "Inscription d'un nouvel utilisateur",
+    requestBody: new OA\RequestBody(
+        required: true,
+        description: "Données de l'utilisateur à inscrire",
+        content: new OA\JsonContent(
+            type: "object",
+            properties: [
+                new OA\Property(property: "firstName", type: "string", example: "Doe"),
+                new OA\Property(property: "lastName", type: "string", example: "John"),
+                new OA\Property(property: "email", type: "string", example: "adresse@email.com"),
+                new OA\Property(property: "password", type: "string", example: "mot de passe")
+            ]
+        )
+    ),
+    responses: [
+        new OA\Response(
+            response: 201,
+            description: "Utilisateur inscrit",
+            content: new OA\JsonContent(
+                type: "object",
+                properties: [
+                    new OA\Property(property: "user", type: "string", example: "email"),
+                    new OA\Property(property: "apiToken", type: "string", example: "0123ErfoEOR54033"),
+                    new OA\Property(
+                        property: "roles",
+                        type: "array",
+                        items: new OA\Items(type: "string", example: "ROLE_USER")
+                    )
+                ]
+            )
+        )
+    ]
+)]
+
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
         $user = $this->serializer->deserialize($request->getContent(), User::class, 'json');
