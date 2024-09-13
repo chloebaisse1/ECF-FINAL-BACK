@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Passage;
 use App\Repository\PassageRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +29,46 @@ class PassageController extends AbstractController
 
 
     #[Route(name: 'new', methods: 'POST')]
+    #[OA\Post(
+        path: "/api/passage",
+        summary: "Creation d'un passage employé(e)",
+        requestBody: new OA\RequestBody(
+            required: true,
+            description: "Données du passage à creer",
+            content: new OA\JsonContent(
+                type: "object",
+                properties: [
+                    new OA\Property(property: "nom", type: "string", example: "nom de l'animal"),
+                    new OA\Property(property: "race", type: "string", example: "race de l'animal"),
+                    new OA\Property(property: "habitat", type: "string", example: "habitat de l'animal"),
+                    new OA\Property(property: "nourriture", type: "string", example: "nourriture donnée"),
+                    new OA\Property(property: "quantitee", type: "string", example: "quantitée donnée"),
+                    new OA\Property(property: "date", type: "string", format: "date-time", example: "date du passage"),
+                    new OA\Property(property: "heure", type: "string", format: "time", example: "heure du passage"),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: "Passage crée avec succès",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "id", type: "integer", example: 1),
+                        new OA\Property(property: "nom", type: "string", example: "Nom de l'animal"),
+                        new OA\Property(property: "race", type: "string", example: "race de l'animal"),
+                        new OA\Property(property: "habitat", type: "string", example: "habitat de l'animal"),
+                        new OA\Property(property: "nourriture", type: "string", example: "nourriture donnée"),
+                        new OA\Property(property: "quantitee", type: "string", example: "quantitée donnée"),
+                        new OA\Property(property: "date", type: "string", format: "date-time", example:"date du passage"),
+                        new OA\Property(property: "heure", type: "string", format: "time", example:"heure du passage"),
+                        new OA\Property(property: "createdAt", type: "string", format: "date-time"),
+                    ]
+                )
+            )
+        ]
+    )]
     public function new(Request $request): JsonResponse
     {
         $passage = $this->serializer->deserialize($request->getContent(), Passage::class, 'json');
@@ -48,6 +89,43 @@ class PassageController extends AbstractController
 
 
     #[Route('/{id}', name: 'show', methods: 'GET')]
+    #[OA\Get(
+        path: "/api/passage/{id}",
+        summary: "Afficher un passage par son ID",
+        parameters: [
+            new OA\Parameter(
+                name: "id",
+                in: "path",
+                required: true,
+                description: "ID du passage à afficher",
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Passage trouvé avec succès",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "id", type: "integer", example: 1),
+                        new OA\Property(property: "nom", type: "string", example: "Nom de l'animal"),
+                        new OA\Property(property: "race", type: "string", example: "race de l'animal"),
+                        new OA\Property(property: "habitat", type: "string", example: "habitat de l'animal"),
+                        new OA\Property(property: "nourriture", type: "string", example: "nourriture donnée"),
+                        new OA\Property(property: "quantitee", type: "string", example: "quantitée donnée"),
+                        new OA\Property(property: "date", type: "string", format: "date-time", example:"date du passage"),
+                        new OA\Property(property: "heure", type: "string", format: "time", example:"heure du passage"),
+                        new OA\Property(property: "createdAt", type: "string", format: "date-time"),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: "Passage non trouvé"
+            )
+        ]
+    )]
     public function show(int $id): JsonResponse
     {
         $passage = $this->repository->findOneBy(['id' => $id]);
@@ -61,6 +139,46 @@ class PassageController extends AbstractController
 }
 
     #[Route('/{id}', name: 'edit', methods: 'PUT')]
+    #[OA\Put(
+        path: "/api/passage/{id}",
+        summary: "Modifier un passage par ID",
+        parameters: [
+            new OA\Parameter(
+                name: "id",
+                in: "path",
+                required: true,
+                description: "ID du passage à modifier",
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            description: "Nouvelles données du passage à mettre à jour",
+            content: new OA\JsonContent(
+                type: "object",
+                properties: [
+                    new OA\Property(property: "id", type: "integer", example: 1),
+                        new OA\Property(property: "nom", type: "string", example: "Nom de l'animal"),
+                        new OA\Property(property: "race", type: "string", example: "race de l'animal"),
+                        new OA\Property(property: "habitat", type: "string", example: "habitat de l'animal"),
+                        new OA\Property(property: "nourriture", type: "string", example: "nourriture donnée"),
+                        new OA\Property(property: "quantitee", type: "string", example: "quantitée donnée"),
+                        new OA\Property(property: "date", type: "string", format: "date-time", example: "date du passage"),
+                        new OA\Property(property: "heure", type: "string", format: "time", example: "heure du passage"),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 204,
+                description: "Passage modifié avec succès"
+            ),
+            new OA\Response(
+                response: 404,
+                description: "Passage non trouvé"
+            )
+        ]
+    )]
     public function edit(int $id, Request $request): Response
     {
         $passage = $this->repository->findOneBy(['id' => $id]);
@@ -84,6 +202,29 @@ class PassageController extends AbstractController
 
 
     #[Route('/{id}', name: 'delete', methods: 'DELETE')]
+    #[OA\Delete(
+        path: "/api/passage/{id}",
+        summary: "Supprimer un passage par son ID",
+        parameters: [
+            new OA\Parameter(
+                name: "id",
+                in: "path",
+                required: true,
+                description: "ID du passage à supprimer",
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 204,
+                description: "Passage supprimé avec succès",
+            ),
+            new OA\Response(
+                response: 404,
+                description: "Passage non trouvé"
+            )
+        ]
+    )]
     public function delete(int $id): JsonResponse
     {
         $passage = $this->repository->findOneBy(['id' => $id]);

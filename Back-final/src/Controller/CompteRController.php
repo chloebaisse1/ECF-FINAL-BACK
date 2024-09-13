@@ -127,6 +127,7 @@ class CompteRController extends AbstractController
             )
         ]
     )]
+
     public function show(int $id): JsonResponse
     {
         $compteR = $this->repository->findOneBy(['id' => $id]);
