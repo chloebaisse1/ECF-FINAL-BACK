@@ -6,63 +6,73 @@ use App\Entity\Contact;
 use App\Repository\ContactRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
 
 #[Route('api/contact', name: 'app_api_contact_')]
 class ContactController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $manager, private ContactRepository $repository)
+    public function __construct(
+        private EntityManagerInterface $manager,
+        private ContactRepository $repository,
+        private SerializerInterface $serializer,
+        private UrlGeneratorInterface $urlGenerator,
+        )
     {
     }
 
 
-    #[Route(name: 'new', methods: 'POST')]
-    public function new(): Response
+    #[Route( methods: 'POST')]
+    public function new(Request $request): JsonResponse
     {
-        $contact = new Contact();
-        $contact->setName('John');
-        $contact->setEmail('johndoe@mail.com');
-        $contact->setDemande('Deamnde de renseignements');
-
+        $contact = $this->serializer->deserialize($request->getContent(), Contact::class, 'json');
+        $contact->setCreatedAt(new \DateTimeImmutable());
 
         $this->manager->persist($contact);
         $this->manager->flush();
 
-        // a stocker en base de données
-        return $this->json(
-            ['message' => 'Demande de contact créé'],
-            Response::HTTP_CREATED
+        $responseData = $this->serializer->serialize($contact, 'json');
+        $location = $this->urlGenerator->generate(
+        'app_api_contact_show',
+        ['id' => $contact->getId()],
+        UrlGeneratorInterface::ABSOLUTE_URL
         );
+
+        return new JsonResponse($responseData, Response::HTTP_CREATED, ["Location"=> $location], true);
     }
+
+
 
     #[Route('/{id}', name: 'show', methods: 'GET')]
-    public function show(int $id): Response
+    public function show(int $id): JsonResponse
     {
         $contact = $this->repository->findOneBy(['id' => $id]);
+            if($contact){
+                $responseData = $this->serializer->serialize($contact, 'json');
 
-            if(!$contact){
-                throw new BadRequestException('Demande de contact non trouvé pour {id} id');
+            return new JsonResponse($responseData, Response::HTTP_OK, [], true);
             }
-            return $this->json(
-                ['message'=> "Demande de contact trouvé : {$contact->getName()} pour {$contact->getId()} id"]
-            );
+
+            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
+
 
 
     #[Route('/{id}', name: 'delete', methods: 'DELETE')]
-    public function delete(int $id): Response
+    public function delete(int $id): JsonResponse
     {
         $contact = $this->repository->findOneBy(['id' => $id]);
-
-        if(!$contact){
-
-            throw new BadRequestException('Demande de contact non trouvé pour {id} id');
-        }
-
+        if($contact){
         $this->manager->remove($contact);
         $this->manager->flush();
-        return $this->json(['message' => 'Demande de contact supprimé'], Response::HTTP_NO_CONTENT);
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        }
+        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
 }
