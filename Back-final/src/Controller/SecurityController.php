@@ -130,6 +130,17 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/account/me', name: 'me', methods: 'GET')]
+    #[OA\Get(
+    path: "/api/account/me",
+    summary: "Récupérer toutes les informations de l'objet User",
+    responses: [
+        new OA\Response(
+            response: 200,
+            description: "Tous les champs utilisateurs retournés"
+        )
+    ]
+)]
+
     public function me(): JsonResponse
     {
         $user = $this->getUser();
@@ -141,6 +152,26 @@ class SecurityController extends AbstractController
 
 
     #[Route('/account/edit', name: 'edit', methods: 'PUT')]
+    #[OA\Put(
+        path: "/api/account/edit",
+        summary: "Modifier son compte utilisateur avec l'un ou tous les champs",
+        requestBody: new OA\RequestBody(
+            required: true,
+            description: "Nouvelles données éventuelles de l'utilisateur à mettre à jour",
+            content: new OA\JsonContent(
+                type: "object",
+                properties: [
+                    new OA\Property(property: "firstName", type: "string", example: "Nouveau prénom")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 204,
+                description: "Utilisateur modifié avec succès"
+            )
+        ]
+    )]
 
     public function edit(Request $request, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
