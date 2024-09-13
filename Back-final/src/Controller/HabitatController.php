@@ -116,9 +116,6 @@ class HabitatController extends AbstractController
         ]
     )]
 
-
-
-
     public function show(int $id): JsonResponse
     {
         $habitat = $this->repository->findOneBy(['id' => $id]);
@@ -130,8 +127,6 @@ class HabitatController extends AbstractController
 
             return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
-
-
 
     #[Route('/{id}', name: 'edit', methods: 'PUT')]
     #[OA\Put(
