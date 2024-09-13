@@ -4,85 +4,95 @@ namespace App\Controller;
 
 use App\Entity\Horaire;
 use App\Repository\HoraireRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('api/horaire', name: 'app_api_horaire_')]
 class HoraireController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $manager, private HoraireRepository $repository)
+    public function __construct(
+        private EntityManagerInterface $manager,
+        private HoraireRepository $repository,
+        private SerializerInterface $serializer,
+        private UrlGeneratorInterface $urlGenerator,
+        )
     {
     }
 
 
-    #[Route(name: 'new', methods: 'POST')]
-    public function new(): Response
+    #[Route( methods: 'POST')]
+    public function new(Request $request): JsonResponse
     {
-        $horaire = new Horaire();
-        $horaire->setJour('Lundi');
-        $horaire->setOuverture(new DateTime());
-        $horaire->setFermeture(new DateTime());
+        $horaire = $this->serializer->deserialize($request->getContent(), Horaire::class, 'json');
+        $horaire->setCreatedAt(new \DateTimeImmutable());
 
         $this->manager->persist($horaire);
         $this->manager->flush();
 
-        // a stocker en base de données
-        return $this->json(
-            ['message' => 'Horaire créé'],
-            Response::HTTP_CREATED
+        $responseData = $this->serializer->serialize($horaire, 'json');
+        $location = $this->urlGenerator->generate(
+        'app_api_horaire_show',
+        ['id' => $horaire->getId()],
+        UrlGeneratorInterface::ABSOLUTE_URL
         );
+
+        return new JsonResponse($responseData, Response::HTTP_CREATED, ["Location"=> $location], true);
     }
+
 
     #[Route('/{id}', name: 'show', methods: 'GET')]
-    public function show(int $id): Response
+    public function show(int $id): JsonResponse
     {
         $horaire = $this->repository->findOneBy(['id' => $id]);
+        if($horaire){
+            $responseData = $this->serializer->serialize($horaire, 'json');
 
-            if(!$horaire){
-                throw new BadRequestException('Horaire non trouvé pour {id} id');
-            }
-            return $this->json(
-                ['message'=> "Habitat trouvé : {$horaire->getJour()} pour {$horaire->getId()} id"]
-            );
-    }
+        return new JsonResponse($responseData, Response::HTTP_OK, [], true);
+        }
+
+        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+}
 
 
     #[Route('/{id}', name: 'edit', methods: 'PUT')]
-    public function edit(int $id): Response
+    public function edit(int $id, Request $request): JsonResponse
     {
         $horaire = $this->repository->findOneBy(['id' => $id]);
+        if($horaire){
+            $habitat = $this->serializer->deserialize(
+                $request->getContent(),
+                Horaire::class,
+                'json',
+                [AbstractNormalizer::OBJECT_TO_POPULATE => $horaire]
+            );
+            $horaire->setUpdatedAt(new \DateTimeImmutable());
 
+            $this->manager->flush();
 
-        if(!$horaire){
-            throw new BadRequestException('Horaire non trouvé pour {id} id');
+            return new JsonResponse(null, Response::HTTP_NO_CONTENT);
         }
-
-        $horaire->setJour('Horaire jour updated');
-
-        $this->manager->flush();
-
-        return $this->redirectToRoute('app_api_horaire_show', ['id' => $horaire->getId()]);
+            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
-
 
 
 
     #[Route('/{id}', name: 'delete', methods: 'DELETE')]
-    public function delete(int $id): Response
+    public function delete(int $id): JsonResponse
     {
         $horaire = $this->repository->findOneBy(['id' => $id]);
-
-        if(!$horaire){
-
-            throw new BadRequestException('Horaire non trouvé pour {id} id');
-        }
-
+        if($horaire){
         $this->manager->remove($horaire);
         $this->manager->flush();
-        return $this->json(['message' => 'Horaire supprimé'], Response::HTTP_NO_CONTENT);
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        }
+        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
 }
