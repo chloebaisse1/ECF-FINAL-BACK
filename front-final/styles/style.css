@@ -48,3 +48,14 @@ img {
 .btn:hover {
   background: var(--accent1);
 }
+
+/**************************************/
+/* Navigation */
+
+.navbar-nav a {
+  color: var(--accent);
+}
+
+.navbar-brand {
+  color: var(--accent2);
+}
