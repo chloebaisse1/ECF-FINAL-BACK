@@ -84,6 +84,10 @@ main {
   margin-bottom: 250px;
 }
 
+.logo {
+  width: 50px;
+  height: 50px;
+}
 /**************************************/
 /* Footer */
 .footer {
@@ -259,6 +263,10 @@ services-container {
 
 /**************************************/
 /* slider Avis */
+
+.avis {
+  background-color: #ebe2e2;
+}
 .slider-1 {
   max-width: 600px;
   margin: 100px auto;
