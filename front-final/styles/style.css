@@ -59,3 +59,18 @@ img {
 .navbar-brand {
   color: var(--accent2);
 }
+
+/**************************************/
+/* Footer */
+/**************************************/
+/* Footer */
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  background: var(--accent2);
+  color: var(--bg);
+  font-size: 13px;
+  text-align: center;
+}
