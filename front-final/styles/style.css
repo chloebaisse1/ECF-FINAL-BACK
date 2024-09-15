@@ -409,3 +409,50 @@ reste divisé par nb de pauses
 .jungle-box:hover .jungle-content {
   top: 0;
 }
+
+/**************************************/
+/* les marais */
+
+.marais-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.marais-box {
+  position: relative;
+  height: 420px;
+  flex: 1 1 17rem;
+  overflow: hidden;
+}
+
+.marais-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.marais-content {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  padding: 20px;
+  padding-top: 8rem;
+  background: transparent;
+  transition: 0.2s ease-in-out;
+  color: whitesmoke;
+}
+
+.marais-content h4 {
+  font-size: clamp(18px, 4vw, 25px);
+}
+.marais-content p {
+  margin-bottom: 2rem;
+}
+.marais-box:hover .marais-content {
+  top: 0;
+}
