@@ -315,3 +315,50 @@ reste divisé par nb de pauses
     transform: translateX(-400%);
   }
 }
+
+/**************************************/
+/* la savane */
+
+.savane-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.savane-box {
+  position: relative;
+  height: 420px;
+  flex: 1 1 17rem;
+  overflow: hidden;
+}
+
+.savane-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.savane-content {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  padding: 20px;
+  padding-top: 8rem;
+  background: transparent;
+  transition: 0.2s ease-in-out;
+  color: white;
+}
+
+.savane-content h4 {
+  font-size: clamp(18px, 4vw, 25px);
+}
+.savane-content p {
+  margin-bottom: 2rem;
+}
+.savane-box:hover .savane-content {
+  top: 0;
+}
