@@ -118,6 +118,7 @@ main {
     height: 100%;
     background-image: url(../images/background.jpg);
     background-size: cover;
+    margin-bottom: 15px;
   }
   * {
     position: relative;
@@ -455,4 +456,15 @@ reste divisé par nb de pauses
 }
 .marais-box:hover .marais-content {
   top: 0;
+}
+
+/**************************************/
+/* formulaires */
+
+.form-label {
+  color: #9eb16a;
+}
+
+.signup {
+  color: #c0896c;
 }
