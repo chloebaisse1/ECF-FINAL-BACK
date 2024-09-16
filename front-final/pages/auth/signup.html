@@ -5,7 +5,7 @@
 </div>
 
 <div class="container pt-3">
-  <form>
+  <form id="formulaireInscription">
     <div class="mb-3">
       <label for="NomInput" class="form-label">Nom</label>
       <input
@@ -13,6 +13,7 @@
         class="form-control"
         id="NomInput"
         placeholder="votre nom"
+        name="nom"
       />
       <div class="invalid-feedback">Le nom est requis</div>
     </div>
@@ -24,6 +25,7 @@
         class="form-control"
         id="PrenomInput"
         placeholder="votre prénom"
+        name="prenom"
       />
       <div class="invalid-feedback">Le prénom est requis</div>
     </div>
@@ -35,13 +37,19 @@
         class="form-control"
         id="EmailInput"
         placeholder="test@mail.com"
+        name="email"
       />
       <div class="invalid-feedback">Le mail n'est pas au format</div>
     </div>
 
     <div class="mb-3">
       <label for="PasswordInput" class="form-label">Mot de passe</label>
-      <input type="password" class="form-control" id="PasswordInput" />
+      <input
+        type="password"
+        class="form-control"
+        id="PasswordInput"
+        name="mdp"
+      />
       <div class="invalid-feedback">
         Le mot de passe n'est pas assez robuste : Au moins 8 caractères,
         comprenant des lettres, des chiffres et des caractères spéciaux.

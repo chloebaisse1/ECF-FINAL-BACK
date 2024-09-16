@@ -1,10 +1,12 @@
 // Implementer le JS de ma page
+
 const inputNom = document.getElementById("NomInput")
 const inputPrenom = document.getElementById("PrenomInput")
 const inputMail = document.getElementById("EmailInput")
 const inputPassword = document.getElementById("PasswordInput")
 const inputValidationPassword = document.getElementById("ValidatePasswordInput")
 const btnValidation = document.getElementById("btn-validation-inscription")
+const formInscription = document.getElementById("formulaireInscription")
 
 inputNom.addEventListener("keyup", validateForm)
 inputPrenom.addEventListener("keyup", validateForm)
@@ -87,14 +89,17 @@ function validateRequired(input) {
 }
 
 function InscrireUtilisateur() {
+  // Recuperer les valeurs des inputs
+  let dataForm = new FormData(formInscription)
+
   const myHeaders = new Headers()
   myHeaders.append("Content-Type", "application/json")
 
   const raw = JSON.stringify({
-    firstName: "Test fetch",
-    lastName: "test test fetch",
-    email: "testdepuisArcadiaZoo@email.com",
-    password: "Azerty11",
+    firstName: dataForm.get("nom"),
+    lastName: dataForm.get("prenom"),
+    email: dataForm.get("email"),
+    password: dataForm.get("mdp"),
   })
 
   const requestOptions = {
@@ -105,7 +110,7 @@ function InscrireUtilisateur() {
   }
 
   fetch("https://127.0.0.1:8000/api/registration", requestOptions)
-    .then((response) => response.text())
+    .then((response) => response.json())
     .then((result) => console.log(result))
     .catch((error) => console.error(error))
 }
