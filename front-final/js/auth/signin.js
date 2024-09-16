@@ -12,6 +12,7 @@ function checkCredentials() {
     setToken(token)
     // placer le token en cookie
 
+    setCookie("RoleCookieName", "admin", 1)
     window.location.replace("/")
   } else {
     mailInput.classList.add("is-invalid")
