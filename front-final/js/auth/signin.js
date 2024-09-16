@@ -1,21 +1,44 @@
 const mailInput = document.getElementById("EmailInput")
 const passwordInput = document.getElementById("PasswordInput")
 const btnSingin = document.getElementById("BtnSignin")
+const signinForm = document.getElementById("signinForm")
 
 btnSingin.addEventListener("click", checkCredentials)
 function checkCredentials() {
-  // Ici il faudra appeler l'API pour vérifier les identifiants
+  let dataForm = new FormData(signinForm)
 
-  if (mailInput.value == "test@mail.com" && passwordInput.value == "123") {
-    // il faudra recuperer le vrai token
-    const token = "loeoeikgu56607kffhoylyy7777OTL"
-    setToken(token)
-    // placer le token en cookie
+  const myHeaders = new Headers()
+  myHeaders.append("Content-Type", "application/json")
 
-    setCookie("RoleCookieName", "admin", 1)
-    window.location.replace("/")
-  } else {
-    mailInput.classList.add("is-invalid")
-    passwordInput.classList.add("is-invalid")
+  const raw = JSON.stringify({
+    username: dataForm.get("email"),
+    password: dataForm.get("mdp"),
+  })
+
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
   }
+
+  fetch(apiUrl + "login", requestOptions)
+    .then((response) => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        mailInput.classList.add("is-invalid")
+        passwordInput.classList.add("is-invalid")
+      }
+    })
+
+    .then((result) => {
+      const token = result.apiToken
+      setToken(token)
+      // placer ce token en cookie
+
+      setCookie(RoleCookieName, result.roles[0], 1)
+      window.location.replace = "/"
+    })
+    .catch((error) => console.log("error", error))
 }
