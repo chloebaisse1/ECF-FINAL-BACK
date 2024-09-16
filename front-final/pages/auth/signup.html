@@ -3,6 +3,7 @@
     <h1>Inscription</h1>
   </div>
 </div>
+
 <div class="container pt-3">
   <form>
     <div class="mb-3">
@@ -13,7 +14,9 @@
         id="NomInput"
         placeholder="votre nom"
       />
+      <div class="invalid-feedback">Le nom est requis</div>
     </div>
+
     <div class="mb-3">
       <label for="PrenomInput" class="form-label">Prénom</label>
       <input
@@ -22,7 +25,9 @@
         id="PrenomInput"
         placeholder="votre prénom"
       />
+      <div class="invalid-feedback">Le prénom est requis</div>
     </div>
+
     <div class="mb-3">
       <label for="EmailInput" class="form-label">Email</label>
       <input
@@ -31,17 +36,28 @@
         id="EmailInput"
         placeholder="test@mail.com"
       />
+      <div class="invalid-feedback">Le mail n'est pas au format</div>
     </div>
+
     <div class="mb-3">
       <label for="PasswordInput" class="form-label">Mot de passe</label>
       <input type="password" class="form-control" id="PasswordInput" />
+      <div class="invalid-feedback">
+        Le mot de passe n'est pas assez robuste : Au moins 8 caractères,
+        comprenant des lettres, des chiffres et des caractères spéciaux.
+      </div>
+      <div class="valid-feedback">Le mot de passe est robuste</div>
     </div>
     <div class="mb-3">
       <label for="ValidatePasswordInput" class="form-label"
         >Valider votre mot de passe</label
       >
       <input type="password" class="form-control" id="ValidatePasswordInput" />
+      <div class="invalid-feedback">
+        La confirmation n'est pas identique au mot de passe
+      </div>
     </div>
+
     <div class="text-center pt-3">
       <button type="submit" class="btn" id="btn-validation-inscription">
         S'inscrire
