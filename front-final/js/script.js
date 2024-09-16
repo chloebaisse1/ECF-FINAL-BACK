@@ -100,3 +100,32 @@ function showAndHideElementsForRoles() {
     }
   })
 }
+
+function getInfosUser() {
+  const myHeaders = new Headers()
+  myHeaders.append("X-AUTH-TOKEN", getToken())
+
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  }
+
+  fetch(apiUrl + "account/me", requestOptions)
+    .then((response) => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        console.log("Impossible de récupérer les informations de l'utilisateur")
+      }
+    })
+    .then((result) => {
+      return result
+    })
+    .catch((error) => {
+      console.error(
+        "Erreur lors de la récupération des informations de l'utilisateur",
+        error
+      )
+    })
+}
