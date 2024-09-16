@@ -11,19 +11,24 @@
         type="email"
         class="form-control"
         id="EmailInput"
-        placeholder="test@mail.com"
+        placeholder="test@mail.fr"
       />
+      <div class="invalid-feedback">
+        Le mail et le mot de passe ne correspondent pas
+      </div>
     </div>
+
     <div class="mb-3">
       <label for="PasswordInput" class="form-label">Mot de passe</label>
       <input type="password" class="form-control" id="PasswordInput" />
     </div>
+
     <div class="text-center pt-3">
-      <button type="submit" class="btn">Connexion</button>
+      <button type="button" class="btn" id="btnSignin">Connexion</button>
     </div>
   </form>
   <div class="text-center pt-4">
-    <a class="signin" href="/signup"
+    <a class="signup" href="/signup"
       >Vous n'avez pas de compte ? Inscrivez vous ici !</a
     >
   </div>
