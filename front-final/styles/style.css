@@ -64,6 +64,10 @@ img {
   color: var(--accent2);
 }
 
+.btn-danger {
+  color: white;
+  background: red;
+}
 /**************************************/
 /* Navigation */
 
@@ -465,6 +469,9 @@ reste divisé par nb de pauses
   color: #9eb16a;
 }
 
-.signup {
+.signup,
+.account,
+.signin,
+.account {
   color: #c0896c;
 }
