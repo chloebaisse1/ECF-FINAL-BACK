@@ -1,6 +1,6 @@
 const inputName = document.getElementById("NameInput")
 const inputMail = document.getElementById("EmailInput")
-const inputMessage = document.getElementById("MessageInput")
+const inputMessage = document.getElementById("DemandeInput")
 const btnValidation = document.getElementById("btn-validation-demande")
 const formContact = document.getElementById("formulaireContact")
 
@@ -15,18 +15,13 @@ function validateForm() {
   const mailOk = validateMail(inputMail)
   const messageOk = validateRequired(inputMessage)
 
-  if (nameOk && mailOk && messageOk) {
-    btnValidation.disabled = false
-  } else {
-    btnValidation.disabled = true
-  }
+  btnValidation.disabled = !(nameOk && mailOk && messageOk)
 }
 
 function validateMail(input) {
-  // Definir mon regex
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   const mailUser = input.value
-  if (mailUser.match(emailRegex)) {
+  if (emailRegex.test(mailUser)) {
     input.classList.add("is-valid")
     input.classList.remove("is-invalid")
     return true
@@ -38,7 +33,7 @@ function validateMail(input) {
 }
 
 function validateRequired(input) {
-  if (input.value != "") {
+  if (input.value.trim() !== "") {
     input.classList.add("is-valid")
     input.classList.remove("is-invalid")
     return true
@@ -50,7 +45,6 @@ function validateRequired(input) {
 }
 
 function EnvoyerDemande() {
-  // Recuperer les valeurs des inputs
   let dataForm = new FormData(formContact)
 
   const myHeaders = new Headers()
@@ -74,15 +68,14 @@ function EnvoyerDemande() {
       if (response.ok) {
         return response.json()
       } else {
-        alert("Erreur lors de l'envoi de la demande")
+        throw new Error("Erreur lors de l'envoi de la demande")
       }
     })
-
     .then((result) => {
       alert(
         "Bravo " + dataForm.get("name") + ", votre demande a bien été envoyée."
       )
       document.location.href = "/"
     })
-    .catch((error) => console.log("error", error))
+    .catch((error) => console.error("error", error))
 }
