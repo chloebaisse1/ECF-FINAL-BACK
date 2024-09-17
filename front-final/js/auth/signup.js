@@ -8,6 +8,9 @@ const inputValidationPassword = document.getElementById("ValidatePasswordInput")
 const btnValidation = document.getElementById("btn-validation-inscription")
 const formInscription = document.getElementById("formulaireInscription")
 
+// On récupère les inputs pour les rôles
+const inputRoles = document.getElementsByName("role")
+
 inputNom.addEventListener("keyup", validateForm)
 inputPrenom.addEventListener("keyup", validateForm)
 inputMail.addEventListener("keyup", validateForm)
@@ -92,6 +95,15 @@ function InscrireUtilisateur() {
   // Recuperer les valeurs des inputs
   let dataForm = new FormData(formInscription)
 
+  // Récuperé le roles selectionné
+  let selectedRole = ""
+  for (let i = 0; i < inputRoles.length; i++) {
+    if (inputRoles[i].checked) {
+      selectedRole = inputRoles[i].value
+      break
+    }
+  }
+
   const myHeaders = new Headers()
   myHeaders.append("Content-Type", "application/json")
 
@@ -100,6 +112,7 @@ function InscrireUtilisateur() {
     lastName: dataForm.get("prenom"),
     email: dataForm.get("email"),
     password: dataForm.get("mdp"),
+    role: selectedRole,
   })
 
   const requestOptions = {

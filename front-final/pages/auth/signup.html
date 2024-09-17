@@ -65,6 +65,41 @@
         La confirmation n'est pas identique au mot de passe
       </div>
     </div>
+    <div class="mb-3">
+      <label class="form-label">Choisissez votre rôle :</label>
+      <div>
+        <input
+          type="radio"
+          id="roleUtilisateur"
+          name="role"
+          value="utilisateur"
+          checked
+        />
+        <label for="roleUtilisateur">Utilisateur</label>
+      </div>
+      <div>
+        <input
+          type="radio"
+          id="roleVeterinaire"
+          name="role"
+          value="veterinaire"
+        />
+        <label for="roleVeterinaire">Vétérinaire</label>
+      </div>
+      <div>
+        <input
+          type="radio"
+          id="roleAdministrateur"
+          name="role"
+          value="administrateur"
+        />
+        <label for="roleAdministrateur">Administrateur</label>
+      </div>
+      <div>
+        <input type="radio" id="roleEmploye" name="role" value="employe" />
+        <label for="roleEmploye">Employé</label>
+      </div>
+    </div>
 
     <div class="text-center pt-3">
       <button type="button" class="btn" id="btn-validation-inscription">
