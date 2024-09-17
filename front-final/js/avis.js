@@ -2,7 +2,7 @@ const inputNom = document.getElementById("NomInput")
 const inputPrenom = document.getElementById("PrenomInput")
 const inputAvis = document.getElementById("AvisInput")
 const formAvis = document.getElementById("formulaireAvis")
-const btnValidation = document.getElementById("btnValidation")
+const btnValidation = document.getElementById("btn-validation-avis")
 
 inputNom.addEventListener("keyup", validateForm)
 inputPrenom.addEventListener("keyup", validateForm)
@@ -15,15 +15,11 @@ function validateForm() {
   const prenomOk = validateRequired(inputPrenom)
   const avisOk = validateRequired(inputAvis)
 
-  if (nomOk && prenomOk && avisOk) {
-    btnValidation.disabled = false
-  } else {
-    btnValidation.disabled = true
-  }
+  btnValidation.disabled = !(nomOk && prenomOk && avisOk)
 }
 
 function validateRequired(input) {
-  if (input.value != "") {
+  if (input.value.trim() !== "") {
     input.classList.add("is-valid")
     input.classList.remove("is-invalid")
     return true
@@ -38,38 +34,34 @@ function EnvoyerAvis() {
   let dataForm = new FormData(formAvis)
 
   const myHeaders = new Headers()
-  myHeaders.append("X-AUTH-TOKEN")
   myHeaders.append("Content-Type", "application/json")
 
   const raw = JSON.stringify({
     nom: dataForm.get("nom"),
     prenom: dataForm.get("prenom"),
-    message: dataForm.get("message"),
+    avis: dataForm.get("avis"),
   })
 
   const requestOptions = {
     method: "POST",
-    headers: myHeaders,
+    Headers: myHeaders,
     body: raw,
     redirect: "follow",
   }
 
-  fetch(apiUrl + "avis", requestOptions)
+  fetch(apiUrl + "avis", requestOptions) // Assurez-vous que l'URL est correcte
     .then((response) => {
       if (response.ok) {
         return response.json()
       } else {
-        alert("Erreur lors de le l'envoi de l'avis")
+        alert("Erreur lors de l'envoi de l'avis")
       }
     })
 
     .then((result) => {
-      alert(
-        "Bravo " +
-          dataForm.get("prenom") +
-          ", votre avis a été envoyé avec succès"
-      )
-      document.location.href = "/"
+      alert("Avis envoyé avec succès")
+      formAvis.reset()
+      validateForm()
     })
     .catch((error) => console.log("error", error))
 }

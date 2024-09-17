@@ -40,9 +40,9 @@ function checkCredentials() {
         setCookie(RoleCookieName, result.roles[0], 1)
 
         // Redirection en fonction du role (admin, employe, veterinaire)
-        const email = result.user
+        const email = result.username
         if (email === "marc@mail.com") {
-          window.location.replace("/veterinaire")
+          window.location.replace("/veterinaire.html")
         } else if (email === "caroline@mail.com") {
           window.location.replace("/dashboard_employe.html")
         } else if (email === "jose@mail.com") {
