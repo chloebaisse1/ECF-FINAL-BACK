@@ -4,13 +4,11 @@ import Route from "./Route.js"
 export const allRoutes = [
   new Route("/", "Accueil", "/pages/home.html", []),
   new Route("/jungle", "Jungle", "/pages/habitats/jungle.html", []),
-  new Route(
-    "/veterinaire",
-    "Vétérinaire",
-    "/pages/veterinaire.html",
-    "/js/veterinaire.js",
-    []
-  ),
+  new Route("/veterinaire", "Veterinaire", "/pages/veterinaire.html", [
+    "ROLE_VETERINAIRE",
+    "connected",
+  ]),
+  new Route("/employe", "Employé", "/pages/employe.html", ["ROLE_EMPLOYEE"]),
   new Route("/savane", "Savane", "/pages/habitats/savane.html", []),
   new Route("/marais", "Marais", "/pages/habitats/marais.html", []),
   new Route("/contact", "Contact", "/pages/contact.html", []),
@@ -30,14 +28,17 @@ export const allRoutes = [
     "/js/auth/signup.js"
   ),
   new Route("/account", "Mon compte", "pages/auth/account.html", [
-    "admin, employe, veterinaire",
+    "ROLE_VETERINAIRE, ROLE_EMPLOYEE, ROLE_ADMIN",
   ]),
   new Route(
     "/editPassword",
     "Changement de mot de passe",
-    ["admin, employe, veterinaire"],
+    ["ROLE_VETERINAIRE, ROLE_EMPLOYEE, ROLE_ADMIN"],
     "pages/auth/editPassword.html"
   ),
+  new Route("/dashboard", "Dashboard", "/pages/auth/dashboard.html", [
+    "ROLE_ADMIN",
+  ]),
 ]
 
 //Le titre s'affiche comme ceci : Route.titre - websitename

@@ -39,18 +39,18 @@ function checkCredentials() {
         // placer ce token en cookie
         setCookie(RoleCookieName, result.roles[0], 1)
 
-        // Redirection en fonction du role (admin, employe, veterinaire)
-        const email = result.username
-        if (email === "marc@mail.com") {
-          window.location.replace("/veterinaire.html")
-        } else if (email === "caroline@mail.com") {
-          window.location.replace("/dashboard_employe.html")
-        } else if (email === "jose@mail.com") {
-          window.location.replace("/dashboard_admin.html")
+        // Redirection en fonction du rôle
+        const roles = result.roles
+        if (roles.includes("ROLE_VETERINAIRE")) {
+          window.location.replace("/veterinaire")
+        } else if (roles.includes("ROLE_EMPLOYEE")) {
+          window.location.replace("/employe")
+        } else if (roles.includes("ROLE_ADMIN")) {
+          window.location.replace("/dashboard")
         } else {
-          window.location.replace("/") // Page par défaut si l'email ne correspond à aucun cas
+          window.location.replace("/") // Page par défaut si aucun rôle ne correspond
         }
       }
     })
-    .catch((error) => console.log("error", error))
+    .catch((error) => console.log("Error:", error))
 }
