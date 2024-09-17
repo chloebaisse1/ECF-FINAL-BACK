@@ -40,15 +40,15 @@ function checkCredentials() {
         setCookie(RoleCookieName, result.roles[0], 1)
 
         // Redirection en fonction du role (admin, employe, veterinaire)
-        const email = result.user // Assurez-vous que l'API renvoie l'email dans 'result.user'
+        const email = result.user
         if (email === "marc@mail.com") {
-          window.location.replace("/dashboard_veterinaire.html")
+          window.location.replace("/veterinaire")
         } else if (email === "caroline@mail.com") {
           window.location.replace("/dashboard_employe.html")
         } else if (email === "jose@mail.com") {
           window.location.replace("/dashboard_admin.html")
         } else {
-          window.location.replace("/dashboard_default.html") // Page par défaut si l'email ne correspond à aucun cas
+          window.location.replace("/") // Page par défaut si l'email ne correspond à aucun cas
         }
       }
     })
