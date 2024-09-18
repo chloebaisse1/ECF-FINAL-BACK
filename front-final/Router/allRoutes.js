@@ -14,7 +14,7 @@ export const allRoutes = [
   new Route("/employe", "Employé", "/pages/employe.html", ["ROLE_EMPLOYEE"]),
   new Route("/savane", "Savane", "/pages/habitats/savane.html", []),
   new Route("/marais", "Marais", "/pages/habitats/marais.html", []),
-  new Route("/contact", "Contact", "/pages/contact.html", []),
+  new Route("/contact", "Contact", "/pages/contact.html", [], "/js/contact.js"),
   new Route("/avis", "Avis", "/pages/avis.html", [], "/js/avis.js"),
   new Route(
     "/signin",

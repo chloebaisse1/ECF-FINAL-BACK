@@ -1,21 +1,25 @@
 const inputName = document.getElementById("NameInput")
 const inputMail = document.getElementById("EmailInput")
 const inputMessage = document.getElementById("DemandeInput")
-const btnValidation = document.getElementById("btn-validation-demande")
 const formContact = document.getElementById("formulaireContact")
 
 inputName.addEventListener("keyup", validateForm)
 inputMail.addEventListener("keyup", validateForm)
 inputMessage.addEventListener("keyup", validateForm)
 
-btnValidation.addEventListener("click", EnvoyerDemande)
+// Utilisation de l'événement 'submit' sur le formulaire
+formContact.addEventListener("submit", EnvoyerDemande)
 
 function validateForm() {
   const nameOk = validateRequired(inputName)
   const mailOk = validateMail(inputMail)
   const messageOk = validateRequired(inputMessage)
 
-  btnValidation.disabled = !(nameOk && mailOk && messageOk)
+  document.getElementById("btn-validation-demande").disabled = !(
+    nameOk &&
+    mailOk &&
+    messageOk
+  )
 }
 
 function validateMail(input) {
@@ -44,7 +48,9 @@ function validateRequired(input) {
   }
 }
 
-function EnvoyerDemande() {
+function EnvoyerDemande(event) {
+  event.preventDefault() // Empêche la soumission par défaut du formulaire
+
   let dataForm = new FormData(formContact)
 
   const myHeaders = new Headers()
@@ -68,7 +74,9 @@ function EnvoyerDemande() {
       if (response.ok) {
         return response.json()
       } else {
-        throw new Error("Erreur lors de l'envoi de la demande")
+        throw new Error(
+          "Erreur lors de l'envoi de la demande : " + response.statusText
+        )
       }
     })
     .then((result) => {
@@ -77,5 +85,5 @@ function EnvoyerDemande() {
       )
       document.location.href = "/"
     })
-    .catch((error) => console.error("error", error))
+    .catch((error) => console.error("Erreur :", error))
 }
