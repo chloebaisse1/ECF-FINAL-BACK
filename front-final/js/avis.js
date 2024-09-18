@@ -1,21 +1,21 @@
 const inputNom = document.getElementById("NomInput")
 const inputPrenom = document.getElementById("PrenomInput")
-const inputAvis = document.getElementById("AvisInput")
+const inputMessage = document.getElementById("MessageInput")
 const formAvis = document.getElementById("formulaireAvis")
 const btnValidation = document.getElementById("btn-validation-avis")
 
 inputNom.addEventListener("keyup", validateForm)
 inputPrenom.addEventListener("keyup", validateForm)
-inputAvis.addEventListener("keyup", validateForm)
+inputMessage.addEventListener("keyup", validateForm)
 
 btnValidation.addEventListener("click", EnvoyerAvis)
 
 function validateForm() {
   const nomOk = validateRequired(inputNom)
   const prenomOk = validateRequired(inputPrenom)
-  const avisOk = validateRequired(inputAvis)
+  const messageOk = validateRequired(inputMessage)
 
-  btnValidation.disabled = !(nomOk && prenomOk && avisOk)
+  btnValidation.disabled = !(nomOk && prenomOk && messageOk)
 }
 
 function validateRequired(input) {
@@ -44,24 +44,24 @@ function EnvoyerAvis() {
 
   const requestOptions = {
     method: "POST",
-    Headers: myHeaders,
+    headers: myHeaders,
     body: raw,
     redirect: "follow",
   }
 
-  fetch(apiUrl + "avis", requestOptions) // Assurez-vous que l'URL est correcte
+  fetch(apiUrl + "avis", requestOptions)
     .then((response) => {
       if (response.ok) {
         return response.json()
       } else {
         alert("Erreur lors de l'envoi de l'avis")
+        throw new Error("Erreur lors de l'envoi de l'avis")
       }
     })
-
     .then((result) => {
       alert("Avis envoyé avec succès")
       formAvis.reset()
-      validateForm()
+      validateForm() // Réinitialiser la validation
     })
-    .catch((error) => console.log("error", error))
+    .catch((error) => console.error("Erreur :", error))
 }

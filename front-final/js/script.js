@@ -11,7 +11,7 @@ function getRole() {
 
 function signout() {
   eraseCookie(tokenCookieName)
-  eraseCookie("RoleCookieName")
+  eraseCookie(RoleCookieName)
   window.location.reload()
 }
 
@@ -61,7 +61,7 @@ disconnected
 connected ( admin, veto, ou employe)
 - admin
 - employe
-- veto
+- veterinaire
 */
 
 function showAndHideElementsForRoles() {
@@ -83,17 +83,17 @@ function showAndHideElementsForRoles() {
         }
         break
       case "admin":
-        if (!userConnected || role != "admin") {
+        if (!userConnected || role != "ROLE_ADMIN") {
           element.classList.add("d-none")
         }
         break
       case "employe":
-        if (!userConnected || role != "employe") {
+        if (!userConnected || role != "ROLE_EMPLOYEE") {
           element.classList.add("d-none")
         }
         break
       case "veterinaire":
-        if (!userConnected || role != "veterinaire") {
+        if (!userConnected || role != "ROLE_VETERINAIRE") {
           element.classList.add("d-none")
         }
         break

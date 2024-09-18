@@ -4,15 +4,18 @@ import Route from "./Route.js"
 export const allRoutes = [
   new Route("/", "Accueil", "/pages/home.html", []),
   new Route("/jungle", "Jungle", "/pages/habitats/jungle.html", []),
-  new Route("/veterinaire", "Veterinaire", "/pages/veterinaire.html", [
-    "ROLE_VETERINAIRE",
-    "connected",
-  ]),
+  new Route(
+    "/veterinaire",
+    "Veterinaire",
+    "/pages/veterinaire.html",
+    ["ROLE_VETERINAIRE", "connected"],
+    "/js/veterinaire.js"
+  ),
   new Route("/employe", "Employé", "/pages/employe.html", ["ROLE_EMPLOYEE"]),
   new Route("/savane", "Savane", "/pages/habitats/savane.html", []),
   new Route("/marais", "Marais", "/pages/habitats/marais.html", []),
   new Route("/contact", "Contact", "/pages/contact.html", []),
-  new Route("/avis", "Avis", "/pages/avis.html", []),
+  new Route("/avis", "Avis", "/pages/avis.html", [], "/js/avis.js"),
   new Route(
     "/signin",
     "Connexion",
