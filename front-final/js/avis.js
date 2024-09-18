@@ -30,7 +30,9 @@ function validateRequired(input) {
   }
 }
 
-function EnvoyerAvis() {
+function EnvoyerAvis(event) {
+  event.preventDefault() // Empêche le rechargement de la page
+
   let dataForm = new FormData(formAvis)
 
   const myHeaders = new Headers()
@@ -39,7 +41,7 @@ function EnvoyerAvis() {
   const raw = JSON.stringify({
     nom: dataForm.get("nom"),
     prenom: dataForm.get("prenom"),
-    avis: dataForm.get("avis"),
+    message: dataForm.get("message"),
   })
 
   const requestOptions = {
@@ -61,7 +63,7 @@ function EnvoyerAvis() {
     .then((result) => {
       alert("Avis envoyé avec succès")
       formAvis.reset()
-      validateForm() // Réinitialiser la validation
+      validateForm()
     })
     .catch((error) => console.error("Erreur :", error))
 }
