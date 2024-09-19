@@ -13,6 +13,7 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
 
+    # Étape de débogage pour lister la structure après clonage
     - name: 🐛 Debug - List directory structure
       run: ls -R
 
@@ -23,21 +24,21 @@ jobs:
         node-version: '20'
 
     - name: Install npm dependencies for back-end
-      working-directory: back-final
       run: npm install
+      working-directory: ../back-final
 
     - name: Build back-end
-      working-directory: back-final
       run: npm run build
+      working-directory: ../back-final
 
     # Frontend setup
     - name: Install npm dependencies for front-end
-      working-directory: front-final
       run: npm install
+      working-directory: .
 
     - name: Build front-end
-      working-directory: front-final
       run: npm run build
+      working-directory: .
 
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
