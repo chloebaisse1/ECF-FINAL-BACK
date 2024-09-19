@@ -40,4 +40,13 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: ftp-ecfarcadia.alwaysdata.net
-​⬤
+        username: ecfarcadia
+        password: ${{ secrets.ftp_password }}
+        protocol: ftps
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/bootstrap/scss/**
+          **/node_modules/bootstrap/js/**
+          **/node_modules/bootstrap-icons/icons/**  
+        server-dir: /www/
