@@ -8,7 +8,7 @@ export const allRoutes = [
     "/veterinaire",
     "Veterinaire",
     "/pages/veterinaire.html",
-    ["ROLE_VETERINAIRE", "connected"],
+    ["ROLE_VETERINAIRE"],
     "/js/veterinaire.js"
   ),
   new Route("/employe", "Employé", "/pages/employe.html", ["ROLE_EMPLOYEE"]),

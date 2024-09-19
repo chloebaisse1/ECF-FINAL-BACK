@@ -1,6 +1,5 @@
 // Sélectionner le formulaire et le bouton de validation
 const form = document.getElementById("formulaireCompte-rendu")
-const btnSubmit = document.getElementById("btn-validation-compte-rendu")
 
 // Fonction de validation
 function validateForm() {
@@ -34,7 +33,9 @@ function validateForm() {
 }
 
 // Fonction pour soumettre le formulaire
-async function submitForm() {
+async function submitForm(event) {
+  event.preventDefault() // Empêcher le comportement par défaut du formulaire
+
   if (!validateForm()) {
     return
   }
@@ -50,12 +51,22 @@ async function submitForm() {
     commentaire: document.getElementById("CommentaireInput").value,
   }
 
+  // Récupérer le token stocké (assurez-vous que le token existe)
+  const token = localStorage.getItem("X-AUTH-TOKEN")
+  if (!token) {
+    alert(
+      "Token manquant. Veuillez vous connecter pour accéder à ce formulaire."
+    )
+    return
+  }
+
   try {
     // Appel à l'API avec la méthode POST
     const response = await fetch(apiUrl + "compteR", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `ApiToken ${token}`, // Utilisez "Authorization" avec le préfixe "ApiToken"
       },
       body: JSON.stringify(formData),
     })
@@ -73,5 +84,5 @@ async function submitForm() {
   }
 }
 
-// Écouter le clic sur le bouton pour valider le formulaire
-btnSubmit.addEventListener("click", submitForm)
+// Ajouter l'écouteur d'événement pour la soumission du formulaire
+form.addEventListener("submit", submitForm)
