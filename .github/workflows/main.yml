@@ -1,5 +1,10 @@
-on : push
+on:
+  push:
+    branches:
+      - main
+
 name: 🚀 Deploy website on push
+
 jobs:
   web-deploy:
     name: 🎉 Deploy
@@ -8,14 +13,29 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
 
-    - name: Install dependencies
+    # Backend setup
+    - name: Set up Node.js for back-end
       uses: actions/setup-node@v2
       with:
         node-version: '20'
 
-    - name: Install npm dependencies
+    - name: Install npm dependencies for back-end
+      working-directory: ECF-FINAL-BACK/back-end
       run: npm install
-   
+
+    - name: Build back-end
+      working-directory: ECF-FINAL-BACK/back-end
+      run: npm run build
+
+    # Frontend setup
+    - name: Install npm dependencies for front-end
+      working-directory: ECF-FINAL-BACK/front-end
+      run: npm install
+
+    - name: Build front-end
+      working-directory: ECF-FINAL-BACK/front-end
+      run: npm run build
+
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
