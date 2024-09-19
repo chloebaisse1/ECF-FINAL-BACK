@@ -20,20 +20,20 @@ jobs:
         node-version: '20'
 
     - name: Install npm dependencies for back-end
-      working-directory: ECF-FINAL-BACK/back-end
+      working-directory: back-final
       run: npm install
 
     - name: Build back-end
-      working-directory: ECF-FINAL-BACK/back-end
+      working-directory: back-final
       run: npm run build
 
     # Frontend setup
     - name: Install npm dependencies for front-end
-      working-directory: ECF-FINAL-BACK/front-end
+      working-directory: front-final
       run: npm install
 
     - name: Build front-end
-      working-directory: ECF-FINAL-BACK/front-end
+      working-directory: front-final
       run: npm run build
 
     - name: 📂 Sync files
