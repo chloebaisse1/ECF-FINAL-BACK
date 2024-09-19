@@ -11,10 +11,10 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        server: ftp-ecfarcadia.alwaysdata.net
+        server: ftps-ecfarcadia.alwaysdata.net
         username: ecfarcadia
         password: ${{ secrets.ftp_password }}
-        protocol: sftp
+        protocol: ftps
         exclude: |
           **/.git*
           **/.git*/**
