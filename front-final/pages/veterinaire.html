@@ -1,4 +1,4 @@
-<div class="hero-scene text-center text-white">
+<div class="hero-scene text-center text-white"></div>
   <div class="hero-scene-content">
     <h1>Espace Vétérinaire</h1>
   </div>
@@ -14,6 +14,7 @@
         id="NomInput"
         placeholder="nom de l'animal"
         name="nom"
+        required
       />
       <div class="invalid-feedback">Le nom est requis</div>
     </div>
@@ -26,8 +27,9 @@
         id="RaceInput"
         placeholder="race de l'animal"
         name="race"
+        required
       />
-      <div class="invalid-feedback">La race est requis</div>
+      <div class="invalid-feedback">La race est requise</div>
     </div>
 
     <div class="mb-3">
@@ -37,8 +39,10 @@
         class="form-control"
         id="HabitatInput"
         placeholder="habitat de l'animal"
-        name="habitat"/>
-      <div class="invalid-feedback">l'habitat est requis</div>
+        name="habitat"
+        required
+      />
+      <div class="invalid-feedback">L'habitat est requis</div>
     </div>
 
     <div class="mb-3">
@@ -48,29 +52,36 @@
         class="form-control"
         id="NourritureInput"
         placeholder="Nourriture de l'animal"
-        name="nourriture"/>
-      <div class="invalid-feedback">la nourriture est requise</div>
+        name="nourriture"
+        required
+      />
+      <div class="invalid-feedback">La nourriture est requise</div>
     </div>
 
     <div class="mb-3">
-      <label for="QuantiteeInput" class="form-label">Quantitee</label>
+      <label for="QuantiteeInput" class="form-label">Quantité</label>
       <input
         type="text"
         class="form-control"
         id="QuantiteeInput"
-        placeholder="Quantitee de nourriture pour l'animal"
-        name="quantitee"/>
-      <div class="invalid-feedback">la quantitee est requise</div>
+        placeholder="Quantité de nourriture pour l'animal"
+        name="quantitee"
+        required
+      />
+      <div class="invalid-feedback">La quantité est requise</div>
     </div>
+
     <div class="mb-3">
       <label for="DateInput" class="form-label">Date</label>
       <input
         type="date"
         class="form-control"
         id="DateInput"
-        placeholder="Date de passage l'animal"
-        name="date"/>
-      <div class="invalid-feedback">la date est requise</div>
+        placeholder="Date de passage de l'animal"
+        name="date"
+        required
+      />
+      <div class="invalid-feedback">La date est requise</div>
     </div>
 
     <div class="mb-3">
@@ -80,7 +91,9 @@
         class="form-control"
         id="CommentaireInput"
         placeholder="Commentaire sur l'animal/habitat"
-        name="commentaire"/>
+        name="commentaire"
+      />
+    </div>
 
     <div class="text-center pt-3">
       <button type="submit" class="btn" id="btn-validation-compte-rendu">

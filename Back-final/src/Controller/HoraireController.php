@@ -4,221 +4,192 @@ namespace App\Controller;
 
 use App\Entity\Horaire;
 use App\Repository\HoraireRepository;
-use OpenApi\Attributes as OA;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('api/horaire', name: 'app_api_horaire_')]
+#[Route('/api/horaire')]
 class HoraireController extends AbstractController
 {
-    public function __construct(
-        private EntityManagerInterface $manager,
-        private HoraireRepository $repository,
-        private SerializerInterface $serializer,
-        private UrlGeneratorInterface $urlGenerator,
-        )
+    private HoraireRepository $repository;
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(HoraireRepository $repository, EntityManagerInterface $entityManager)
     {
+        $this->repository = $repository;
+        $this->entityManager = $entityManager;
     }
 
+    #[Route('', methods: 'GET')]
+    #[OA\Get(
+        path: "/api/horaire",
+        summary: "Récupérer tous les horaires",
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Liste des horaires récupérée avec succès",
+                content: new OA\JsonContent(
+                    type: "array",
+                    items: new OA\Items(
+                        type: "object",
+                        properties: [
+                            new OA\Property(property: "id", type: "integer", example: 1),
+                            new OA\Property(property: "jour", type: "string", example: "Lundi"),
+                            new OA\Property(property: "ouverture", type: "string", format: "time"),
+                            new OA\Property(property: "fermeture", type: "string", format: "time"),
+                        ]
+                    )
+                )
+            )
+        ]
+    )]
+    public function index(): JsonResponse
+    {
+        $horaires = $this->repository->findAll();
 
-    #[Route( methods: 'POST')]
+        // Formatage de la réponse
+        $responseData = [];
+        foreach ($horaires as $horaire) {
+            $responseData[] = [
+                'id' => $horaire->getId(),
+                'jour' => $horaire->getJour(),
+                'ouverture' => $horaire->getOuverture()->format('H:i:s'),
+                'fermeture' => $horaire->getFermeture()->format('H:i:s'),
+            ];
+        }
+
+        return new JsonResponse($responseData, Response::HTTP_OK);
+    }
+
+    #[Route('', methods: 'POST')]
     #[OA\Post(
         path: "/api/horaire",
-        summary: "Creation d'un horaire",
+        summary: "Ajouter un nouvel horaire",
         requestBody: new OA\RequestBody(
             required: true,
-            description: "Données de l'horaire à creer",
             content: new OA\JsonContent(
                 type: "object",
                 properties: [
-                    new OA\Property(property: "jour", type: "string", example: "jour"),
+                    new OA\Property(property: "jour", type: "string", example: "Lundi"),
                     new OA\Property(property: "ouverture", type: "string", format: "time"),
                     new OA\Property(property: "fermeture", type: "string", format: "time"),
-
                 ]
             )
         ),
         responses: [
             new OA\Response(
                 response: 201,
-                description: "Horaire crée avec succès",
+                description: "Horaire créé avec succès",
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
-                        new OA\Property(property: "id", type: "integer", example: 1),
-                        new OA\Property(property: "jour", type: "string", example: "Jour"),
-                        new OA\Property(property: "ouverture", type: "string", format: "time"),
-                        new OA\Property(property: "fermeture", type: "string", format: "time"),
-                        new OA\Property(property: "createdAt", type: "string", format: "date-time"),
-                    ]
-                )
-            )
-        ]
-    )]
-
-    public function new(Request $request): JsonResponse
-    {
-        $horaire = $this->serializer->deserialize($request->getContent(), Horaire::class, 'json');
-        $horaire->setCreatedAt(new \DateTimeImmutable());
-
-        $this->manager->persist($horaire);
-        $this->manager->flush();
-
-        $responseData = $this->serializer->serialize($horaire, 'json');
-        $location = $this->urlGenerator->generate(
-        'app_api_horaire_show',
-        ['id' => $horaire->getId()],
-        UrlGeneratorInterface::ABSOLUTE_URL
-        );
-
-        return new JsonResponse($responseData, Response::HTTP_CREATED, ["Location"=> $location], true);
-    }
-
-
-    #[Route('/{id}', name: 'show', methods: 'GET')]
-    #[OA\Get(
-        path: "/api/horaire/{id}",
-        summary: "Afficher un Horaire par son ID",
-        parameters: [
-            new OA\Parameter(
-                name: "id",
-                in: "path",
-                required: true,
-                description: "ID de l'horaire à afficher",
-                schema: new OA\Schema(type: "integer")
-            )
-        ],
-        responses: [
-            new OA\Response(
-                response: 200,
-                description: "Horaire trouvé avec succès",
-                content: new OA\JsonContent(
-                    type: "object",
-                    properties: [
-                        new OA\Property(property: "id", type: "integer", example: 1),
-                        new OA\Property(property: "jour", type: "string", example: "Jour"),
-                        new OA\Property(property: "ouverture", type: "string", format: "time"),
-                        new OA\Property(property: "fermeture", type: "string", format: "time"),
-                        new OA\Property(property: "createdAt", type: "string", format: "date-time")
+                        new OA\Property(property: "id", type: "integer"),
+                        new OA\Property(property: "jour", type: "string"),
+                        new OA\Property(property: "ouverture", type: "string"),
+                        new OA\Property(property: "fermeture", type: "string"),
                     ]
                 )
             ),
-            new OA\Response(
-                response: 404,
-                description: "Horaire non trouvé"
-            )
+            new OA\Response(response: 400, description: "Requête invalide")
         ]
     )]
-    public function show(int $id): JsonResponse
+    public function new(Request $request): JsonResponse
     {
-        $horaire = $this->repository->findOneBy(['id' => $id]);
-        if($horaire){
-            $responseData = $this->serializer->serialize($horaire, 'json');
+        $data = json_decode($request->getContent(), true);
 
-        return new JsonResponse($responseData, Response::HTTP_OK, [], true);
+        // Validation des données
+        if (!isset($data['jour'], $data['ouverture'], $data['fermeture'])) {
+            return new JsonResponse(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
-}
+        $horaire = new Horaire();
+        $horaire->setJour($data['jour']);
+        $horaire->setOuverture(new \DateTime($data['ouverture']));
+        $horaire->setFermeture(new \DateTime($data['fermeture']));
 
+        $this->entityManager->persist($horaire);
+        $this->entityManager->flush();
 
-    #[Route('/{id}', name: 'edit', methods: 'PUT')]
+        return new JsonResponse([
+            'id' => $horaire->getId(),
+            'jour' => $horaire->getJour(),
+            'ouverture' => $horaire->getOuverture()->format('H:i:s'),
+            'fermeture' => $horaire->getFermeture()->format('H:i:s'),
+        ], Response::HTTP_CREATED);
+    }
+
+    #[Route('/{id}', methods: 'PUT')]
     #[OA\Put(
         path: "/api/horaire/{id}",
-        summary: "Modifier un horaire par ID",
+        summary: "Modifier un horaire existant",
         parameters: [
-            new OA\Parameter(
-                name: "id",
-                in: "path",
-                required: true,
-                description: "ID de l'horaire à modifier",
-                schema: new OA\Schema(type: "integer")
-            )
+            new OA\Parameter(name: "id", in: "path", required: true, description: "ID de l'horaire"),
         ],
         requestBody: new OA\RequestBody(
             required: true,
-            description: "Nouvelles données de l'horaire à mettre à jour",
             content: new OA\JsonContent(
                 type: "object",
                 properties: [
-                    new OA\Property(property: "jour", type: "string", example: "Nouvel horaire"),
-                    new OA\Property(property: "ouverture", type: "string", format: "time", example: "Nouvelle heure d'ouverture"),
-                    new OA\Property(property: "fermeture", type: "string", format: "time", example: "Nouvelle heure de fermeture"),
+                    new OA\Property(property: "jour", type: "string", example: "Lundi"),
+                    new OA\Property(property: "ouverture", type: "string", format: "time"),
+                    new OA\Property(property: "fermeture", type: "string", format: "time"),
                 ]
             )
         ),
         responses: [
-            new OA\Response(
-                response: 204,
-                description: "Horaire modifié avec succès"
-            ),
-            new OA\Response(
-                response: 404,
-                description: "Horaire non trouvé"
-            )
+            new OA\Response(response: 200, description: "Horaire modifié avec succès"),
+            new OA\Response(response: 404, description: "Horaire non trouvé"),
         ]
     )]
-    public function edit(int $id, Request $request): JsonResponse
+    public function edit(Request $request, $id): JsonResponse
     {
-        $horaire = $this->repository->findOneBy(['id' => $id]);
-        if($horaire){
-            $horaire = $this->serializer->deserialize(
-                $request->getContent(),
-                Horaire::class,
-                'json',
-                [AbstractNormalizer::OBJECT_TO_POPULATE => $horaire]
-            );
-            $horaire->setUpdatedAt(new \DateTimeImmutable());
-
-            $this->manager->flush();
-
-            return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        $horaire = $this->repository->find($id);
+        if (!$horaire) {
+            return new JsonResponse(['error' => 'Horaire non trouvé'], Response::HTTP_NOT_FOUND);
         }
-            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+
+        $data = json_decode($request->getContent(), true);
+        if (isset($data['jour'])) {
+            $horaire->setJour($data['jour']);
+        }
+        if (isset($data['ouverture'])) {
+            $horaire->setOuverture(new \DateTime($data['ouverture']));
+        }
+        if (isset($data['fermeture'])) {
+            $horaire->setFermeture(new \DateTime($data['fermeture']));
+        }
+
+        $this->entityManager->flush();
+
+        return new JsonResponse(['message' => 'Horaire modifié avec succès'], Response::HTTP_OK);
     }
 
-
-
-    #[Route('/{id}', name: 'delete', methods: 'DELETE')]
+    #[Route('/{id}', methods: 'DELETE')]
     #[OA\Delete(
         path: "/api/horaire/{id}",
-        summary: "Supprimer un horaire par son ID",
+        summary: "Supprimer un horaire",
         parameters: [
-            new OA\Parameter(
-                name: "id",
-                in: "path",
-                required: true,
-                description: "ID de l'horaire à supprimer",
-                schema: new OA\Schema(type: "integer")
-            )
+            new OA\Parameter(name: "id", in: "path", required: true, description: "ID de l'horaire"),
         ],
         responses: [
-            new OA\Response(
-                response: 204,
-                description: "Horaire supprimé avec succès",
-            ),
-            new OA\Response(
-                response: 404,
-                description: "Horaire non trouvé"
-            )
+            new OA\Response(response: 204, description: "Horaire supprimé avec succès"),
+            new OA\Response(response: 404, description: "Horaire non trouvé"),
         ]
     )]
-    public function delete(int $id): JsonResponse
+    public function delete($id): JsonResponse
     {
-        $horaire = $this->repository->findOneBy(['id' => $id]);
-        if($horaire){
-        $this->manager->remove($horaire);
-        $this->manager->flush();
+        $horaire = $this->repository->find($id);
+        if (!$horaire) {
+            return new JsonResponse(['error' => 'Horaire non trouvé'], Response::HTTP_NOT_FOUND);
+        }
+
+        $this->entityManager->remove($horaire);
+        $this->entityManager->flush();
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
-        }
-        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
 }

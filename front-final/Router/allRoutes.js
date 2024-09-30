@@ -3,7 +3,13 @@ import Route from "./Route.js"
 //Définir ici vos routes
 export const allRoutes = [
   new Route("/", "Accueil", "/pages/home.html", []),
-  new Route("/jungle", "Jungle", "/pages/habitats/jungle.html", []),
+  new Route(
+    "/jungle",
+    "Jungle",
+    "/pages/habitats/jungle.html",
+    [],
+    "/js/like.js"
+  ),
   new Route(
     "/veterinaire",
     "Veterinaire",
@@ -11,9 +17,27 @@ export const allRoutes = [
     ["ROLE_VETERINAIRE"],
     "/js/veterinaire.js"
   ),
-  new Route("/employe", "Employé", "/pages/employe.html", ["ROLE_EMPLOYEE"]),
-  new Route("/savane", "Savane", "/pages/habitats/savane.html", []),
-  new Route("/marais", "Marais", "/pages/habitats/marais.html", []),
+  new Route(
+    "/employe",
+    "Employé",
+    "/pages/employe.html",
+    ["ROLE_EMPLOYEE"],
+    "/js/auth/employe.js"
+  ),
+  new Route(
+    "/savane",
+    "Savane",
+    "/pages/habitats/savane.html",
+    [],
+    "/js/like.js"
+  ),
+  new Route(
+    "/marais",
+    "Marais",
+    "/pages/habitats/marais.html",
+    [],
+    "/js/like.js"
+  ),
   new Route("/contact", "Contact", "/pages/contact.html", [], "/js/contact.js"),
   new Route("/avis", "Avis", "/pages/avis.html", [], "/js/avis.js"),
   new Route(
@@ -39,9 +63,38 @@ export const allRoutes = [
     ["ROLE_VETERINAIRE, ROLE_EMPLOYEE, ROLE_ADMIN"],
     "pages/auth/editPassword.html"
   ),
-  new Route("/dashboard", "Dashboard", "/pages/auth/dashboard.html", [
+  new Route("/dashboard", "dashboard", "/pages/admin/dashboard.html", [
     "ROLE_ADMIN",
   ]),
+  new Route(
+    "/admin/services",
+    "Services",
+    "/pages/admin/services.html",
+    ["ROLE_ADMIN"],
+    "js/admin/services.js"
+  ),
+  new Route(
+    "/admin/habitats",
+    "Habitats",
+    "/pages/admin/habitats.html",
+    ["ROLE_ADMIN"],
+    "js/admin/habitats.js"
+  ),
+  new Route(
+    "/admin/utilisateurs",
+    "Utilisateurs",
+    "/pages/admin/utilisateurs.html",
+    ["ROLE_ADMIN"],
+    "/js/admin/utilisateurs.js"
+  ),
+  new Route("/admin/animaux", "Animaux", "/pages/admin/animaux.html"),
+  new Route(
+    "/admin/horaires",
+    "Horaires",
+    "/pages/admin/horaires.html",
+    ["ROLE_ADMIN"],
+    "/js/admin/horaires.js"
+  ),
 ]
 
 //Le titre s'affiche comme ceci : Route.titre - websitename

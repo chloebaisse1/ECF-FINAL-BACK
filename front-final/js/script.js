@@ -49,7 +49,9 @@ function eraseCookie(name) {
 }
 
 function isConnected() {
-  if (getToken() == null || getToken == undefined) {
+  const token = getToken()
+  console.log("Vérification de la connexion - Token:", token) // Log pour vérifier si le token est récupéré
+  if (token == null || token == undefined) {
     return false
   } else {
     return true
@@ -67,6 +69,8 @@ connected ( admin, veto, ou employe)
 function showAndHideElementsForRoles() {
   const userConnected = isConnected()
   const role = getRole()
+
+  console.log("Role utilisateur récupéré:", role) // Log pour vérifier le rôle récupéré
 
   let allElementsToEdit = document.querySelectorAll("[data-show]")
 
@@ -102,8 +106,11 @@ function showAndHideElementsForRoles() {
 }
 
 function getInfosUser() {
+  const token = getToken()
+  console.log("Token utilisé pour récupérer les infos de l'utilisateur:", token) // Log pour vérifier le token
+
   const myHeaders = new Headers()
-  myHeaders.append("X-AUTH-TOKEN", getToken())
+  myHeaders.append("X-AUTH-TOKEN", token)
 
   const requestOptions = {
     method: "GET",
@@ -113,6 +120,7 @@ function getInfosUser() {
 
   fetch(apiUrl + "account/me", requestOptions)
     .then((response) => {
+      console.log("Réponse du serveur:", response) // Log de la réponse serveur
       if (response.ok) {
         return response.json()
       } else {
@@ -120,6 +128,7 @@ function getInfosUser() {
       }
     })
     .then((result) => {
+      console.log("Informations utilisateur récupérées:", result) // Log des infos de l'utilisateur
       return result
     })
     .catch((error) => {

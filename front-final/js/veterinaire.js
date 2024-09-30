@@ -1,88 +1,98 @@
-// Sélectionner le formulaire et le bouton de validation
-const form = document.getElementById("formulaireCompte-rendu")
+const inputNom = document.getElementById("NomInput")
+const inputRace = document.getElementById("RaceInput")
+const inputHabitat = document.getElementById("HabitatInput")
+const inputNourriture = document.getElementById("NourritureInput")
+const inputQuantitee = document.getElementById("QuantiteeInput")
+const inputDate = document.getElementById("DateInput")
+const inputCommentaire = document.getElementById("CommentaireInput")
+const formCompteR = document.getElementById("formulaireCompte-rendu")
+const btnValidation = document.getElementById("btn-validation-compte-rendu") // ID corrigé
 
-// Fonction de validation
+inputNom.addEventListener("keyup", validateForm)
+inputRace.addEventListener("keyup", validateForm)
+inputHabitat.addEventListener("keyup", validateForm)
+inputNourriture.addEventListener("keyup", validateForm)
+inputQuantitee.addEventListener("keyup", validateForm)
+inputDate.addEventListener("keyup", validateForm)
+inputCommentaire.addEventListener("keyup", validateForm)
+
+formCompteR.addEventListener("submit", EnvoyerCompteR)
+
 function validateForm() {
-  let isValid = true
+  const nomOk = validateRequired(inputNom)
+  const raceOk = validateRequired(inputRace)
+  const habitatOk = validateRequired(inputHabitat)
+  const nourritureOk = validateRequired(inputNourriture)
+  const quantiteeOk = validateRequired(inputQuantitee)
+  const dateOk = validateRequired(inputDate)
+  const commentaireOk = validateRequired(inputCommentaire)
 
-  // Récupérer tous les champs du formulaire
-  const inputs = form.querySelectorAll("input")
+  btnValidation.disabled = !(
+    nomOk &&
+    raceOk &&
+    habitatOk &&
+    nourritureOk &&
+    quantiteeOk &&
+    dateOk &&
+    commentaireOk
+  )
+}
 
-  // Réinitialiser les erreurs de validation
-  inputs.forEach((input) => {
+function validateRequired(input) {
+  if (!input.value.trim()) {
+    input.classList.add("is-invalid")
+    return false
+  } else {
     input.classList.remove("is-invalid")
-    const feedback = input.nextElementSibling
-    if (feedback && feedback.classList.contains("invalid-feedback")) {
-      feedback.style.display = "none"
-    }
+    return true
+  }
+}
+
+function EnvoyerCompteR(event) {
+  event.preventDefault()
+
+  let dataForm = new FormData(formCompteR)
+
+  const myHeaders = new Headers()
+  myHeaders.append("Content-Type", "application/json")
+  myHeaders.append("X-AUTH-TOKEN", getToken()) // Utilise le token récupéré
+
+  const raw = JSON.stringify({
+    nom: dataForm.get("nom"), // Utiliser le nom du champ
+    race: dataForm.get("race"),
+    habitat: dataForm.get("habitat"),
+    nourriture: dataForm.get("nourriture"),
+    quantitee: dataForm.get("quantitee"),
+    date: dataForm.get("date"),
+    commentaire: dataForm.get("commentaire"),
   })
 
-  // Valider chaque champ
-  inputs.forEach((input) => {
-    if (input.value.trim() === "") {
-      input.classList.add("is-invalid")
-      const feedback = input.nextElementSibling
-      if (feedback && feedback.classList.contains("invalid-feedback")) {
-        feedback.style.display = "block"
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    credentials: "include", // Ajout des credentials
+    redirect: "follow",
+  }
+
+  fetch(apiUrl + "compteR", requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((err) => {
+          throw new Error(
+            err.message || "Erreur dans la soumission du formulaire"
+          )
+        })
       }
-      isValid = false
-    }
-  })
-
-  return isValid
-}
-
-// Fonction pour soumettre le formulaire
-async function submitForm(event) {
-  event.preventDefault() // Empêcher le comportement par défaut du formulaire
-
-  if (!validateForm()) {
-    return
-  }
-
-  // Récupérer les données du formulaire
-  const formData = {
-    nom: document.getElementById("NomInput").value,
-    race: document.getElementById("RaceInput").value,
-    habitat: document.getElementById("HabitatInput").value,
-    nourriture: document.getElementById("NourritureInput").value,
-    quantitee: document.getElementById("QuantiteeInput").value,
-    date: document.getElementById("DateInput").value,
-    commentaire: document.getElementById("CommentaireInput").value,
-  }
-
-  // Récupérer le token stocké (assurez-vous que le token existe)
-  const token = localStorage.getItem("X-AUTH-TOKEN")
-  if (!token) {
-    alert(
-      "Token manquant. Veuillez vous connecter pour accéder à ce formulaire."
-    )
-    return
-  }
-
-  try {
-    // Appel à l'API avec la méthode POST
-    const response = await fetch(apiUrl + "compteR", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `ApiToken ${token}`, // Utilisez "Authorization" avec le préfixe "ApiToken"
-      },
-      body: JSON.stringify(formData),
+      return response.json() // Utilisez .json() pour traiter la réponse
     })
-
-    if (response.ok) {
-      // Traiter la réponse de l'API
-      alert("Formulaire soumis avec succès !")
-      form.reset() // Réinitialiser le formulaire après la soumission
-    } else {
-      alert("Erreur lors de la soumission du formulaire.")
-    }
-  } catch (error) {
-    console.error("Erreur réseau:", error)
-    alert("Erreur de connexion à l'API.")
-  }
+    .then((data) => {
+      console.log("Réponse du serveur:", data)
+      alert("Compte-rendu créé avec succès!")
+      formCompteR.reset() // Réinitialise le formulaire
+    })
+    .catch((error) => {
+      console.error("Erreur:", error)
+      alert(error.message)
+    })
 }
-
-// Ajouter l'écouteur d'événement pour la soumission du formulaire
-form.addEventListener("submit", submitForm)

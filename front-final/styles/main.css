@@ -1,0 +1,295 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  display: flex; /* Pour que le footer reste en bas */
+  flex-direction: column; /* Permet au footer de rester en bas */
+  height: 100vh; /* Hauteur de la fenêtre */
+}
+
+.container {
+  display: flex;
+  flex: 1; /* Permet au conteneur principal de s'étendre */
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #9eb16a;
+  color: #fff;
+  padding: 20px;
+  position: fixed; /* Rester fixe */
+  height: 100%; /* Prendre toute la hauteur de la fenêtre */
+}
+
+.sidebar-header h2 {
+  margin-bottom: 20px;
+}
+
+.sidebar-menu {
+  list-style: none;
+}
+
+.sidebar-menu li {
+  margin: 15px 0;
+}
+
+.sidebar-menu li a {
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-menu li a i {
+  margin-right: 10px;
+}
+
+.sidebar-menu li a:hover {
+  background-color: #9eb16a;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.main-content {
+  margin-left: 250px; /* Largeur de la sidebar */
+  padding: 20px;
+  flex-grow: 1;
+}
+
+header {
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  margin: 0;
+}
+
+footer {
+  background-color: #fff;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/*********************/
+/* Services section */
+.form-container {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  margin: 20px;
+}
+
+input[type="text"],
+textarea {
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.btn {
+  background-color: #9eb16a;
+  color: white;
+  border: none;
+  margin: 10px;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #9eb16a;
+}
+
+.service {
+  margin: 20px;
+}
+.service-list {
+  margin-top: 20px;
+}
+
+.service-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.service-list th,
+.service-list td {
+  padding: 10px;
+  margin: 20px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.service-list th {
+  background-color: #f2f2f2;
+}
+
+.service-list tr:hover {
+  background-color: #f9f9f9;
+}
+
+.delete-btn {
+  background-color: #f44336;
+}
+
+.edit-btn {
+  background-color: #c0896c;
+}
+
+/*********************/
+/* Habitat section */
+
+.habitat {
+  margin: 20px;
+}
+.habitat-list {
+  margin-top: 20px;
+}
+
+.habitat-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.habitat-list th,
+.habitat-list td {
+  padding: 10px;
+  margin: 20px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.habitat-list th {
+  background-color: #f2f2f2;
+}
+
+.habitat-list tr:hover {
+  background-color: #f9f9f9;
+}
+
+/*********************/
+/* Users section */
+
+.user {
+  margin: 20px;
+}
+.user-list {
+  margin-top: 20px;
+}
+
+.user-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-list th,
+.user-list td {
+  padding: 10px;
+  margin: 20px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.user-list th {
+  background-color: #f2f2f2;
+}
+
+.user-list tr:hover {
+  background-color: #f9f9f9;
+}
+
+/*********************/
+/* Animaux section */
+
+.animal {
+  margin: 20px;
+}
+.animal-list {
+  margin-top: 20px;
+}
+
+.animal-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.animal-list th,
+.animal-list td {
+  padding: 10px;
+  margin: 20px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.animal-list th {
+  background-color: #f2f2f2;
+}
+
+.animal-list tr:hover {
+  background-color: #f9f9f9;
+}
+
+/*********************/
+/* horaires section */
+
+.horaire {
+  margin: 20px;
+}
+.horaire-list {
+  margin-top: 20px;
+}
+
+.horaire-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.horaire-list th,
+.horaire-list td {
+  padding: 10px;
+  margin: 20px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.horaire-list th {
+  background-color: #f2f2f2;
+}
+
+.horaire-list tr:hover {
+  background-color: #f9f9f9;
+}

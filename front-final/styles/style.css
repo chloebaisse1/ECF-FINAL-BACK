@@ -475,3 +475,31 @@ reste divisé par nb de pauses
 .account {
   color: #c0896c;
 }
+
+/***************************/
+/*******Like Button*********/
+
+.savane-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.savane-box {
+  position: relative; /* Pour positionner les éléments enfants */
+  margin: 15px;
+}
+
+.like-container {
+  position: absolute; /* Positionner par rapport à .savane-box */
+  bottom: 10px; /* Ajuster la distance du bas de l'image */
+  right: 10px; /* Ajuster la distance du bord droit */
+  display: flex;
+  align-items: center; /* Centrer verticalement les éléments */
+  background: rgba(255, 255, 255, 0.8); /* Fond blanc transparent */
+  border-radius: 5px; /* Coins arrondis */
+  padding: 5px; /* Espacement interne */
+}
+
+.heart-icon {
+  margin-right: 5px; /* Espacement entre le cœur et le compteur */
+}

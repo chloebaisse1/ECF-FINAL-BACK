@@ -1,4 +1,4 @@
-<div class="hero-scene text-center text-white">
+<div class="hero-scene text-center text-white"></div>
   <div class="hero-scene-content">
     <h1>Espace Employé</h1>
   </div>
@@ -27,7 +27,7 @@
         placeholder="race de l'animal"
         name="race"
       />
-      <div class="invalid-feedback">La race est requis</div>
+      <div class="invalid-feedback">La race est requise</div>
     </div>
 
     <div class="mb-3">
@@ -39,7 +39,7 @@
         placeholder="habitat de l'animal"
         name="habitat"
       />
-      <div class="invalid-feedback">l'habitat est requis</div>
+      <div class="invalid-feedback">L'habitat est requis</div>
     </div>
 
     <div class="mb-3">
@@ -51,7 +51,7 @@
         placeholder="Nourriture de l'animal"
         name="nourriture"
       />
-      <div class="invalid-feedback">la nourriture est requise</div>
+      <div class="invalid-feedback">La nourriture est requise</div>
     </div>
 
     <div class="mb-3">
@@ -63,29 +63,31 @@
         placeholder="Quantitee de nourriture pour l'animal"
         name="quantitee"
       />
-      <div class="invalid-feedback">la quantitee est requise</div>
+      <div class="invalid-feedback">La quantitee est requise</div>
     </div>
+
     <div class="mb-3">
       <label for="DateInput" class="form-label">Date</label>
       <input
         type="date"
         class="form-control"
         id="DateInput"
-        placeholder="Date de passage l'animal"
+        placeholder="Date de passage de l'animal"
         name="date"
       />
-      <div class="invalid-feedback">la date est requise</div>
+      <div class="invalid-feedback">La date est requise</div>
     </div>
+
     <div class="mb-3">
       <label for="HeureInput" class="form-label">Heure</label>
       <input
         type="time"
         class="form-control"
         id="HeureInput"
-        placeholder="Heure de passage l'animal"
+        placeholder="Heure de passage de l'animal"
         name="time"
       />
-      <div class="invalid-feedback">l'heure est requise</div>
+      <div class="invalid-feedback">L'heure est requise</div>
     </div>
 
     <div class="text-center pt-3">
@@ -93,5 +95,8 @@
         Envoyer
       </button>
     </div>
+
+    <!-- Div pour afficher les messages d'erreur ou de succès -->
+    <div id="message" class="mt-3"></div>
   </form>
 </div>
