@@ -22,7 +22,7 @@ export const allRoutes = [
     "Employé",
     "/pages/employe.html",
     ["ROLE_EMPLOYEE"],
-    "/js/auth/employe.js"
+    "/js/employe.js"
   ),
   new Route(
     "/savane",
@@ -63,9 +63,13 @@ export const allRoutes = [
     ["ROLE_VETERINAIRE, ROLE_EMPLOYEE, ROLE_ADMIN"],
     "pages/auth/editPassword.html"
   ),
-  new Route("/dashboard", "dashboard", "/pages/admin/dashboard.html", [
-    "ROLE_ADMIN",
-  ]),
+  new Route(
+    "/dashboard",
+    "dashboard",
+    "/pages/admin/dashboard.html",
+    ["ROLE_ADMIN"],
+    "/js/admin/dashboard.js"
+  ),
   new Route(
     "/admin/services",
     "Services",
@@ -87,7 +91,20 @@ export const allRoutes = [
     ["ROLE_ADMIN"],
     "/js/admin/utilisateurs.js"
   ),
-  new Route("/admin/animaux", "Animaux", "/pages/admin/animaux.html"),
+  new Route(
+    "/admin/animaux",
+    "Animaux",
+    "/pages/admin/animaux.html",
+    ["ROLE_ADMIN"],
+    "js/admin/animaux.js"
+  ),
+  new Route(
+    "/admin/compteR",
+    "CompteR",
+    "/pages/admin/compteR.html",
+    ["ROLE_ADMIN"],
+    "js/admin/compteRendu.js"
+  ),
   new Route(
     "/admin/horaires",
     "Horaires",

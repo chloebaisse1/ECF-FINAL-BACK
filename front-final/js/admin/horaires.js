@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Fonction pour récupérer les horaires
   async function fetchHoraires() {
     try {
-      const response = await fetch("https://localhost:8000/api/horaire")
+      const response = await fetch("http://localhost:8080/api/horaire")
       if (!response.ok)
         throw new Error("Erreur lors de la récupération des horaires")
       return await response.json()

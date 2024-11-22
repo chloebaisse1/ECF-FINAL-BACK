@@ -1,28 +1,36 @@
 const tokenCookieName = "accesstoken"
 const RoleCookieName = "role"
 const signoutBtn = document.getElementById("signout-btn")
-const apiUrl = "https://127.0.0.1:8000/api/"
+const apiUrl = "http://localhost:8080/api/"
+
+// Éléments pour afficher les comptes rendus
+const compteRenduContainer = document.getElementById("compte-rendu-container") // Assurez-vous d'avoir cet élément dans votre HTML
 
 signoutBtn.addEventListener("click", signout)
 
+// Fonction pour récupérer le rôle de l'utilisateur
 function getRole() {
   return getCookie(RoleCookieName)
 }
 
+// Fonction de déconnexion
 function signout() {
   eraseCookie(tokenCookieName)
   eraseCookie(RoleCookieName)
   window.location.reload()
 }
 
+// Fonction pour définir le token
 function setToken(token) {
   setCookie(tokenCookieName, token, 1)
 }
 
+// Fonction pour récupérer le token
 function getToken() {
   return getCookie(tokenCookieName)
 }
 
+// Fonctions pour gérer les cookies
 function setCookie(name, value, days) {
   var expires = ""
   if (days) {
@@ -48,29 +56,19 @@ function eraseCookie(name) {
   document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;"
 }
 
+// Fonction pour vérifier si l'utilisateur est connecté
 function isConnected() {
   const token = getToken()
-  console.log("Vérification de la connexion - Token:", token) // Log pour vérifier si le token est récupéré
-  if (token == null || token == undefined) {
-    return false
-  } else {
-    return true
-  }
+  console.log("Vérification de la connexion - Token:", token)
+  return token != null
 }
 
-/*
-disconnected
-connected ( admin, veto, ou employe)
-- admin
-- employe
-- veterinaire
-*/
-
+// Fonction pour afficher/masquer des éléments en fonction des rôles
 function showAndHideElementsForRoles() {
   const userConnected = isConnected()
   const role = getRole()
 
-  console.log("Role utilisateur récupéré:", role) // Log pour vérifier le rôle récupéré
+  console.log("Role utilisateur récupéré:", role)
 
   let allElementsToEdit = document.querySelectorAll("[data-show]")
 
@@ -105,9 +103,10 @@ function showAndHideElementsForRoles() {
   })
 }
 
+// Fonction pour récupérer les informations de l'utilisateur
 function getInfosUser() {
   const token = getToken()
-  console.log("Token utilisé pour récupérer les infos de l'utilisateur:", token) // Log pour vérifier le token
+  console.log("Token utilisé pour récupérer les infos de l'utilisateur:", token)
 
   const myHeaders = new Headers()
   myHeaders.append("X-AUTH-TOKEN", token)
@@ -120,7 +119,7 @@ function getInfosUser() {
 
   fetch(apiUrl + "account/me", requestOptions)
     .then((response) => {
-      console.log("Réponse du serveur:", response) // Log de la réponse serveur
+      console.log("Réponse du serveur:", response)
       if (response.ok) {
         return response.json()
       } else {
@@ -128,7 +127,7 @@ function getInfosUser() {
       }
     })
     .then((result) => {
-      console.log("Informations utilisateur récupérées:", result) // Log des infos de l'utilisateur
+      console.log("Informations utilisateur récupérées:", result)
       return result
     })
     .catch((error) => {

@@ -1,4 +1,4 @@
-const API_URL = "https://localhost:8000/api/service"
+const API_URL = "http://localhost:8080/api/service"
 
 // Création d'un service
 document

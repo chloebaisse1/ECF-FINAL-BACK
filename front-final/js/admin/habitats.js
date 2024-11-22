@@ -1,4 +1,4 @@
-const API_URL_HABITAT = "https://localhost:8000/api/habitat"
+const API_URL_HABITAT = "http://localhost:8080/api/habitat"
 
 // Création d'un habitat
 document

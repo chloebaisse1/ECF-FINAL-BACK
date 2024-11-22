@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Fonction pour récupérer la liste des utilisateurs
   function fetchUsers() {
-    fetch("https://localhost:8000/api/users", {
+    fetch("http://localhost:8080/api/users", {
       method: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("apiToken"),

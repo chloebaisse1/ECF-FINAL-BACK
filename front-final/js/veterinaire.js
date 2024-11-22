@@ -6,7 +6,7 @@ const inputQuantitee = document.getElementById("QuantiteeInput")
 const inputDate = document.getElementById("DateInput")
 const inputCommentaire = document.getElementById("CommentaireInput")
 const formCompteR = document.getElementById("formulaireCompte-rendu")
-const btnValidation = document.getElementById("btn-validation-compte-rendu") // ID corrigé
+const btnValidation = document.getElementById("btn-validation-compte-rendu")
 
 inputNom.addEventListener("keyup", validateForm)
 inputRace.addEventListener("keyup", validateForm)
@@ -58,7 +58,7 @@ function EnvoyerCompteR(event) {
   myHeaders.append("X-AUTH-TOKEN", getToken()) // Utilise le token récupéré
 
   const raw = JSON.stringify({
-    nom: dataForm.get("nom"), // Utiliser le nom du champ
+    nom: dataForm.get("nom"), // Assurez-vous que le nom correspond à celui défini dans le HTML
     race: dataForm.get("race"),
     habitat: dataForm.get("habitat"),
     nourriture: dataForm.get("nourriture"),
@@ -67,29 +67,32 @@ function EnvoyerCompteR(event) {
     commentaire: dataForm.get("commentaire"),
   })
 
+  console.log("Données envoyées:", raw) // Log des données envoyées
+
   const requestOptions = {
     method: "POST",
     headers: myHeaders,
     body: raw,
-    credentials: "include", // Ajout des credentials
-    redirect: "follow",
   }
 
-  fetch(apiUrl + "compteR", requestOptions)
+  fetch("http://localhost:8080/api/compteR", requestOptions)
     .then((response) => {
-      if (!response.ok) {
-        return response.json().then((err) => {
-          throw new Error(
-            err.message || "Erreur dans la soumission du formulaire"
-          )
-        })
-      }
-      return response.json() // Utilisez .json() pour traiter la réponse
+      console.log("Réponse brute:", response) // Affiche la réponse brute
+      return response.text() // Obtenez le texte brut d'abord
     })
-    .then((data) => {
-      console.log("Réponse du serveur:", data)
-      alert("Compte-rendu créé avec succès!")
-      formCompteR.reset() // Réinitialise le formulaire
+    .then((text) => {
+      console.log("Texte brut de la réponse:", text) // Affichez le texte brut pour le débogage
+      try {
+        const data = JSON.parse(text) // Essayez de parser le texte en JSON
+        console.log("Réponse du serveur:", data)
+
+        // Affichez une alerte de succès et réinitialisez le formulaire
+        alert("Compte-rendu créé avec succès!")
+        formCompteR.reset() // Réinitialise le formulaire
+      } catch (error) {
+        console.error("Erreur lors du parsing JSON:", error)
+        alert("Erreur de parsing JSON: " + text)
+      }
     })
     .catch((error) => {
       console.error("Erreur:", error)
